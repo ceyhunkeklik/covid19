@@ -1,6 +1,6 @@
 {
   "name": "covid19-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "COVID-19 Tracker CLI",
   "bin": {
     "covid19": "./cli.js"
@@ -11,6 +11,11 @@
     "Coronavirus",
     "tracker"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceyhunkeklik/covid19.git"
+  },
+  "homepage": "https://github.com/ceyhunkeklik/covid19",
   "author": "Ceyhun Keklik",
   "license": "ISC",
   "dependencies": {
