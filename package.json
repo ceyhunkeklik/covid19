@@ -1,0 +1,18 @@
+{
+  "name": "covid19",
+  "version": "1.0.0",
+  "description": "COVID-19 Tracker",
+  "bin": {
+    "covid19": "./cli.js"
+  },
+  "keywords": [],
+  "author": "Ceyhun Keklik",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "0.19.2",
+    "chalk": "3.0.0",
+    "cli-table": "0.3.1",
+    "clui": "0.3.6",
+    "minimist": "1.2.5"
+  }
+}
