@@ -1,11 +1,16 @@
 {
   "name": "covid19-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "COVID-19 Tracker CLI",
   "bin": {
     "covid19": "./cli.js"
   },
-  "keywords": [],
+  "keywords": [
+    "covid",
+    "covid19",
+    "Coronavirus",
+    "tracker"
+  ],
   "author": "Ceyhun Keklik",
   "license": "ISC",
   "dependencies": {
