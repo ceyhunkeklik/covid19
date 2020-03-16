@@ -1,7 +1,7 @@
 {
-  "name": "covid19",
+  "name": "covid19-cli",
   "version": "1.0.0",
-  "description": "COVID-19 Tracker",
+  "description": "COVID-19 Tracker CLI",
   "bin": {
     "covid19": "./cli.js"
   },
