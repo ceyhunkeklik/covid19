@@ -17,3 +17,6 @@ With the following command, you can see **spesific result of a country**.
 ```bash
 $ covid19 --country Turkey
 ```
+
+## Example Result
+![covid19 Example Result](https://github.com/ceyhunkeklik/covid19/blob/master/result.png?raw=true)
