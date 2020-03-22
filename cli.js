@@ -17,6 +17,9 @@ var countdown = new Spinner("Loading...  ", [
   "⣷"
 ]);
 
+const filterProp = "displayName";
+const displayProp = "displayName";
+
 countdown.start();
 
 const getValue = country => [
@@ -26,7 +29,11 @@ const getValue = country => [
 ];
 
 axios
-  .get("https://www.bing.com/covid/data")
+  .get("https://www.bing.com/covid/data", {
+    headers: {
+      "Accept-Language": "en-US"
+    }
+  })
   .then(response => response.data)
   .then(response => {
     countdown.stop();
@@ -42,21 +49,18 @@ axios
     });
 
     if (argv.country) {
-      var country = response.areas.find(area => {
-        return (
-          area.displayName.indexOf(argv.country) >= 0 ||
-          area.country.indexOf(argv.country) >= 0
-        );
-      });
+      var country = response.areas.find(
+        area => area[filterProp].indexOf(argv.country) >= 0
+      );
     }
 
     if (country) {
-      table.push([country.country, ...getValue(country)]);
+      table.push([country[displayProp], ...getValue(country)]);
     } else {
       table.push(["Worldwide", ...getValue(response)]);
 
       response.areas.forEach(area => {
-        table.push([area.country, ...getValue(area)]);
+        table.push([area[displayProp], ...getValue(area)]);
       });
     }
 
