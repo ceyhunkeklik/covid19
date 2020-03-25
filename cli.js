@@ -23,9 +23,9 @@ const displayProp = "displayName";
 countdown.start();
 
 const getValue = country => [
-  chalk.yellow.bold(country.totalConfirmed),
-  chalk.green.bold(country.totalRecovered),
-  chalk.red.bold(country.totalDeaths)
+  chalk.yellow.bold(country.totalConfirmed ? country.totalConfirmed : 0),
+  chalk.green.bold(country.totalRecovered ? country.totalRecovered : 0),
+  chalk.red.bold(country.totalDeaths ? country.totalDeaths : 0)
 ];
 
 axios
