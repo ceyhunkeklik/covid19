@@ -34,17 +34,19 @@ axios(endpoint)
         chalk.black.bold("Total Confirmed"),
         chalk.black.bold("Total Recovered"),
         chalk.black.bold("Total Death"),
+        chalk.black.bold("Total Active"),
       ],
-      colWidths: [30, 30, 30, 30],
-      colAligns: ["left", "right", "right", "right"],
+      colWidths: [30, 30, 30, 30, 30],
+      colAligns: ["left", "right", "right", "right", "right"],
     });
 
     const mappedData = Array.isArray(response.data)
-      ? response.data.map(({ country, cases, recovered, deaths }) => ({
+      ? response.data.map(({ country, cases, recovered, deaths, active }) => ({
           country,
           cases,
           recovered,
           deaths,
+          active,
         }))
       : [
           {
@@ -52,11 +54,12 @@ axios(endpoint)
             cases: response.data.cases,
             recovered: response.data.recovered,
             deaths: response.data.deaths,
+            active: response.data.active,
           },
         ];
 
     if (!isCountry) {
-      table.push(["Worldwide", 0, 0, 0]);
+      table.push(["Worldwide", 0, 0, 0, 0]);
     }
 
     const formatter = new Intl.NumberFormat();
@@ -65,11 +68,12 @@ axios(endpoint)
       return `${value} (${chalk.black.bold(`${percentage.toFixed(2)}%`)})`;
     };
 
-    mappedData.forEach(({ country, cases, recovered, deaths }) => {
+    mappedData.forEach(({ country, cases, recovered, deaths, active }) => {
       if (!isCountry) {
         table[0][1] += cases;
         table[0][2] += recovered;
         table[0][3] += deaths;
+        table[0][4] += active;
       }
 
       table.push([
@@ -77,12 +81,14 @@ axios(endpoint)
         formatter.format(cases),
         formatCell(recovered, (recovered * 100) / cases),
         formatCell(deaths, (deaths * 100) / cases),
+        formatCell(active, (active * 100) / cases),
       ]);
     });
 
     if (!isCountry) {
       table[0][2] = formatCell(table[0][2], (table[0][2] * 100) / table[0][1]);
       table[0][3] = formatCell(table[0][3], (table[0][3] * 100) / table[0][1]);
+      table[0][4] = formatCell(table[0][4], (table[0][4] * 100) / table[0][1]);
       table[0][1] = formatter.format(table[0][1]);
     }
 
