@@ -5,7 +5,6 @@ const Spinner = require("clui").Spinner;
 const Table = require("cli-table");
 const argv = require("minimist")(process.argv.slice(2));
 const chalk = require("chalk");
-const fetchData = require("./src/fetch");
 
 var countdown = new Spinner("Loading...  ", [
   "⣾",
@@ -18,48 +17,76 @@ var countdown = new Spinner("Loading...  ", [
   "⣷",
 ]);
 
-const { filterProp, displayProp } = require("./src/config");
-
 countdown.start();
 
-const getValue = (country) => [
-  chalk.yellow.bold(country.totalConfirmed ? country.totalConfirmed : 0),
-  chalk.green.bold(country.totalRecovered ? country.totalRecovered : 0),
-  chalk.red.bold(country.totalDeaths ? country.totalDeaths : 0),
-];
+const isCountry = !!argv.country;
+const endpoint = isCountry
+  ? `https://corona.lmao.ninja/v2/countries/${argv.country}`
+  : `https://corona.lmao.ninja/v2/countries`;
 
-fetchData.then((response) => {
-  countdown.stop();
+axios(endpoint)
+  .then((response) => {
+    countdown.stop();
 
-  const table = new Table({
-    head: [
-      chalk.black.bold("Area"),
-      chalk.black.bold("Total Confirmed"),
-      chalk.black.bold("Total Recovered"),
-      chalk.black.bold("Total Death"),
-    ],
-    colWidths: [30, 30, 30, 30],
-  });
-
-  if (argv.country) {
-    var country = response.areas.find(
-      (area) => area[filterProp].indexOf(argv.country) >= 0
-    );
-  }
-
-  if (country) {
-    table.push([country[displayProp], ...getValue(country)]);
-  } else {
-    table.push(["Worldwide", ...getValue(response)]);
-
-    response.areas.forEach((area) => {
-      if (area[displayProp]) {
-        table.push([area[displayProp], ...getValue(area)]);
-      }
+    const table = new Table({
+      head: [
+        chalk.black.bold("Area"),
+        chalk.black.bold("Total Confirmed"),
+        chalk.black.bold("Total Recovered"),
+        chalk.black.bold("Total Death"),
+      ],
+      colWidths: [30, 30, 30, 30],
+      colAligns: ["left", "right", "right", "right"],
     });
-  }
 
-  console.log(table.toString());
+    const mappedData = Array.isArray(response.data)
+      ? response.data.map(({ country, cases, recovered, deaths }) => ({
+          country,
+          cases,
+          recovered,
+          deaths,
+        }))
+      : [
+          {
+            country: response.data.country,
+            cases: response.data.cases,
+            recovered: response.data.recovered,
+            deaths: response.data.deaths,
+          },
+        ];
 
-  process.exit(0);
-});
+    if (!isCountry) {
+      table.push(["Worldwide", 0, 0, 0]);
+    }
+
+    const formatter = new Intl.NumberFormat();
+
+    mappedData.forEach(({ country, cases, recovered, deaths }) => {
+      if (!isCountry) {
+        table[0][1] += cases;
+        table[0][2] += recovered;
+        table[0][3] += deaths;
+      }
+
+      table.push([
+        country,
+        formatter.format(cases),
+        formatter.format(recovered),
+        formatter.format(deaths),
+      ]);
+    });
+
+    if (!isCountry) {
+      table[0][1] = formatter.format(table[0][1]);
+      table[0][2] = formatter.format(table[0][2]);
+      table[0][3] = formatter.format(table[0][3]);
+    }
+
+    console.log(table.toString());
+
+    process.exit(0);
+  })
+  .catch((reason) => {
+    countdown.stop();
+    console.error(reason);
+  });

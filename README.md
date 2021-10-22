@@ -13,7 +13,7 @@ With the following command, you can see result of **Worldwide** and **All Countr
 ```bash
 $ covid19
 ```
-With the following command, you can see **spesific result of a country**.
+With the following command, you can see **spesific result of a country** with Full Name (ex. Turkey), ISO2 (ex. TR) or ISO3 (ex. TUR) format.
 ```bash
 $ covid19 --country Turkey
 ```

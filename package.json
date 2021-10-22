@@ -19,9 +19,9 @@
   "author": "Ceyhun Keklik",
   "license": "ISC",
   "dependencies": {
-    "axios": "0.19.2",
-    "chalk": "3.0.0",
-    "cli-table": "0.3.1",
+    "axios": "0.23.0",
+    "chalk": "4.1.2",
+    "cli-table": "0.3.6",
     "clui": "0.3.6",
     "minimist": "1.2.5"
   }
