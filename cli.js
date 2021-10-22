@@ -61,6 +61,10 @@ axios(endpoint)
 
     const formatter = new Intl.NumberFormat();
 
+    const formatCell = (value, percentage) => {
+      return `${value} (${chalk.black.bold(`${percentage.toFixed(2)}%`)})`;
+    };
+
     mappedData.forEach(({ country, cases, recovered, deaths }) => {
       if (!isCountry) {
         table[0][1] += cases;
@@ -71,15 +75,15 @@ axios(endpoint)
       table.push([
         country,
         formatter.format(cases),
-        formatter.format(recovered),
-        formatter.format(deaths),
+        formatCell(recovered, (recovered * 100) / cases),
+        formatCell(deaths, (deaths * 100) / cases),
       ]);
     });
 
     if (!isCountry) {
+      table[0][2] = formatCell(table[0][2], (table[0][2] * 100) / table[0][1]);
+      table[0][3] = formatCell(table[0][3], (table[0][3] * 100) / table[0][1]);
       table[0][1] = formatter.format(table[0][1]);
-      table[0][2] = formatter.format(table[0][2]);
-      table[0][3] = formatter.format(table[0][3]);
     }
 
     console.log(table.toString());
